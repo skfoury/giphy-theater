@@ -9,7 +9,7 @@
 
   <div class="container">
 
-    <div id="buttons-view"></div>
+    <div id="buttonsDiv"></div>
 
     <form id="gifSearch">
       <label for="gifInput">Add a Gif</label>
@@ -42,7 +42,7 @@
       function renderButtons() {
 
 
-        $("#buttons-view").empty();
+        $("#buttonsDiv").empty();
 
         for (var i = 0; i < gifsArray.length; i++) {
 
@@ -50,11 +50,11 @@
 
           a.addClass("gif");
 
-          a.attr("data-name", gifsArray[i]);
+          a.attr("gifData", gifsArray[i]);
 
           a.text(gifsArray[i]);
 
-          $("#buttons-view").append(a);
+          $("#buttonsDiv").append(a);
         }
       }
 
@@ -64,7 +64,7 @@
 
       $("button").on("click", function () {
 
-        var gifName = $(this).attr("data-name");
+        var gifName = $(this).attr("gifData");
         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
           gifName + "&api_key=dc6zaTOxFJmzC&limit=10";
         console.log("Gif name is: " + gifName);
