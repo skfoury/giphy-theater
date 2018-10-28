@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div id="buttons-view"></div>
+
+    <form id="gifSearch">
+      <label for="gifInput">Add a Gif</label>
+      <input type="text" id="gifInput"><br>
+
+      <input id="addGif" type="submit" value="Add gif">
+    </form>
+    <div id="gifsDiv">
+      <p></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var gifsArray = ["Cats", "Dogs", "Pokemon", "Space Jam", "Bruins" , ];
+
+       $("#addGif").on("click", function (event) {
+        event.preventDefault();
+
+        var gifAdded = $("#gifInput").val().trim();
+
+        gifsArray.push(gifAdded);
+        console.log(gifsArray);
+        console.log(gifAdded);
+
+
+        renderButtons();
+      });
+
+      
+      function renderButtons() {
+
+
+        $("#buttons-view").empty();
+
+        for (var i = 0; i < gifsArray.length; i++) {
+
+          var a = $("<button>");
+
+          a.addClass("gif");
+
+          a.attr("data-name", gifsArray[i]);
+
+          a.text(gifsArray[i]);
+
+          $("#buttons-view").append(a);
+        }
+      }
+
+    
+
+      renderButtons();
+
+      $("button").on("click", function () {
+
+        var gifName = $(this).attr("data-name");
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+          gifName + "&api_key=dc6zaTOxFJmzC&limit=10";
+        console.log("Gif name is: " + gifName);
+
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        })
+          .then(function (response) {
+            var results = response.data;
+
+            for (var i = 0; i < results.length; i++) {
+              var gifs = $("gifsDiv");
+
+              var rating = results[i].rating;
+
+              var p = $("<p>").text("Rating: " + rating);
+
+              var gifImageResult = $("<img>");
+              gifImageResult.attr("src", results[i].images.fixed_height.url);
+
+              gifImageResult.prepend(p);
+              gifImageResult.prepend(gifImageResult);
+
+              $("#gifsDiv").prepend(gifImageResult);
+
+              console.log(gifName);
+              console.log(response.data);
+
+            }
+          });
+      });
+
+    </script>
+  </div>
+</body>
+
+</html>
